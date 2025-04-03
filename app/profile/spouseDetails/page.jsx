@@ -4,17 +4,18 @@ import * as React from "react";
 import "../../global.scss";
 import styled from "@emotion/styled";
 import Navbar from "@/component/molecules/navbar/navbar";
-import { mq } from "@/styles/breakpoint";
 import { useRouter } from 'next/navigation';
 import MyProfileSection from "@/component/molecules/myProfile/myProfile";
 import EditContentSpouseDetails from "@/component/organism/contentSpouseDetails/editContentSpouseDetails";
 import ContentSpouseDetails from "@/component/organism/contentSpouseDetails/contentSpouseDetails";
+import { useFetchUserData } from "@/src/utils/axiosConfig";
 
 
 export default function Profile() {
   const router = useRouter();
   const [isEdit, setIsEdit] = React.useState(false);
-
+  useFetchUserData();
+  
   const link = url => {
     if(url === '/profile') {
       return router.push(url);

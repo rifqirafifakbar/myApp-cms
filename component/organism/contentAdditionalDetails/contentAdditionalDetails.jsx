@@ -1,9 +1,10 @@
 "use client";
 import * as React from "react";
 import styled from "@emotion/styled";
+import useDataStore from "@/src/store/dataStore";
 
 const ContentAdditionalDetails = (props) => {
-  const {data} = props;
+  const { data } = useDataStore();
 
   return (
     <StyleContentProfileWrapper>

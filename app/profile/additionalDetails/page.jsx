@@ -4,43 +4,24 @@ import * as React from "react";
 import "../../global.scss";
 import styled from "@emotion/styled";
 import Navbar from "@/component/molecules/navbar/navbar";
-import { mq } from "@/styles/breakpoint";
 import { useRouter } from 'next/navigation';
 import MyProfileSection from "@/component/molecules/myProfile/myProfile";
 import EditContentAdditionalDetails from "@/component/organism/contentAdditionalDetails/editContentAdditionalDetails";
 import ContentAdditionalDetails from "@/component/organism/contentAdditionalDetails/contentAdditionalDetails";
+import { useFetchUserData } from "@/src/utils/axiosConfig";
 
 
 export default function Profile() {
   const router = useRouter();
   const [isEdit, setIsEdit] = React.useState(false);
   const [data, setData] = React.useState(false);
-
+  useFetchUserData();
   const link = url => {
     if(url === '/profile') {
       return router.push(url);
     }
     return  router.push(`/profile${url}`);
   }
-
-  const getData = async () => {
-    const id = gettLocalStorage(); 
-
-    // try {
-    //   const response = await axios.get(`https://api.backendless.com/E9CD262C-3DC6-48EE-B5CC-FCF044E3CE94/33513148-B3F6-491D-9033-344F76DE21D3/users/${id}`);
-    //   if(response.status === 200) {
-    //     const {data} = response;
-    //     console.log(data);
-    //     setData(data);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }    
-  }
-
-  React.useEffect(() => {
-    getData();
-  },[])
 
   return (
     <StyledivProfilePage className="ProfilePage container">
@@ -67,9 +48,9 @@ export default function Profile() {
         </StyleProfile>
 
         {isEdit ? 
-          <EditContentAdditionalDetails data={data}/>
+          <EditContentAdditionalDetails/>
           : 
-          <ContentAdditionalDetails data={data}/>
+          <ContentAdditionalDetails/>
         }
       </StyleProfileWrapper>
     </StyledivProfilePage>

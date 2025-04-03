@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import InputComponent from "@/component/atoms/input/input";
 import DropdownComponent from "@/component/atoms/dropdown/dropdownComponent";
 import ButtonComponent from "@/component/atoms/button/ButtonComponent";
+import useDataStore from "@/src/store/dataStore";
 
 const data = [
   {
@@ -25,7 +26,9 @@ const data = [
   }
 ];
 
-const EditContentProfile = (props) => {
+const EditContentProfile = () => {
+  const { data } = useDataStore();
+
   return (
     <StyleContentProfileWrapper>
       <div className="imageWrapper">
