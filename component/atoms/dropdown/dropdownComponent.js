@@ -3,26 +3,12 @@ import * as React from "react";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import WorkIcon from "@mui/icons-material/Work";
 import styled from "@emotion/styled";
 
 const dataDummy = [
   {
-    name: 'Select salutation',
+    name: 'Select',
     value: '',
-    icon: '',
-  },
-  {
-    name: 'Mr',
-    value: 'Mr',
-  },
-  {
-    name: 'Mrs',
-    value: 'Mrs',
-  },
-  {
-    name: 'Ms',
-    value: 'Ms',
   }
 ];
 
@@ -51,7 +37,7 @@ const DropdownComponent = (props) => {
         >
           {data.length ? data.map((item,idx) => {
             return (
-              <StyleMenuItem value={item.value} key={idx}>{item.icon ? <WorkIcon /> : ''}{item.name}</StyleMenuItem>
+              <StyleMenuItem value={item.value} key={idx}>{item.name}</StyleMenuItem>
             )
           }) : ''}
         </StyleSelect>

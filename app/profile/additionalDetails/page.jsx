@@ -2,18 +2,18 @@
 
 import * as React from "react";
 import "../../global.scss";
-import EditIcon from "@mui/icons-material/Edit";
 import styled from "@emotion/styled";
 import Navbar from "@/component/molecules/navbar/navbar";
 import { mq } from "@/styles/breakpoint";
-import ProfileNavbar from "@/component/atoms/profileNavbar/ProfileNavbar";
-import InputComponent from "@/component/atoms/input/input";
 import { useRouter } from 'next/navigation';
+import MyProfileSection from "@/component/molecules/myProfile/myProfile";
+import EditContentAdditionalDetails from "@/component/organism/contentAdditionalDetails/editContentAdditionalDetails";
+import ContentAdditionalDetails from "@/component/organism/contentAdditionalDetails/contentAdditionalDetails";
 
 
 export default function Profile() {
   const router = useRouter();
-  const [section, isSection] = React.useState(0);
+  const [isEdit, setIsEdit] = React.useState(false);
 
   const link = url => {
     if(url === '/profile') {
@@ -25,17 +25,7 @@ export default function Profile() {
   return (
     <StyledivProfilePage className="ProfilePage container">
       <Navbar />
-      <StyleMyProfile className="myProfile">
-        <div className="myProfileWrapper">
-          <h1>
-            My <strong>Profile</strong>
-          </h1>
-          <div className="squareAssets"></div>
-        </div>
-        <button className="edit-profile">
-          Edit profile <EditIcon />
-        </button>
-      </StyleMyProfile>
+      <MyProfileSection isEdit={isEdit} setIsEdit={setIsEdit} />
 
       <StyleProfileWrapper className="profileWrapper">
 
@@ -56,30 +46,11 @@ export default function Profile() {
           </ul>
         </StyleProfile>
 
-        <div className="contentProfileWrapper">
-          <div className="details">
-            <div className="details-profile">
-              <span className="title">Home address*</span>
-              <span className="content">Mr</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">Country*</span>
-              <span className="content">John</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">Postal code*</span>
-              <span className="content">Mr</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">Date of birth</span>
-              <span className="content">johndoe@anyemail.com</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">Marital status</span>
-              <span className="content">johndoe@anyemail.com</span>
-            </div>
-          </div>
-        </div>
+        {isEdit ? 
+          <EditContentAdditionalDetails />
+          : 
+          <ContentAdditionalDetails />
+        }
       </StyleProfileWrapper>
     </StyledivProfilePage>
   );
@@ -128,14 +99,6 @@ const StyleProfileWrapper = styled.div`
   .contentProfileWrapper {
     text-align: left;
     display: flex;
-
-    .image {
-      background-image: url("/profile.png");
-      width: 100px;
-      height: 100px;
-      background-size: cover;
-      margin-right: 50px;
-    }
 
     .details {
       .details-profile {

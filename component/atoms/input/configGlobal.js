@@ -8,6 +8,19 @@ export const StyleFormControl = styled(FormControl)`
   margin-bottom: 10px;
   width: 100%;
 
+  .inputDate {
+    .MuiInputBase-input {
+      padding: 5px;
+    }
+  
+    fieldset {
+      border: 1px solid black;
+      border-radius: 0;
+      height: 40px;
+    }
+  }
+
+
   &.flex {
     justify-content: normal;
 

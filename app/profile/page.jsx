@@ -11,6 +11,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useRouter } from "next/navigation";
 import ContentProfile from "@/component/organism/contentProfile/contentProfile";
 import EditContentProfile from "@/component/organism/contentProfile/editContentProfile";
+import MyProfileSection from "@/component/molecules/myProfile/myProfile";
 
 export default function Profile() {
   const router = useRouter();
@@ -27,25 +28,7 @@ export default function Profile() {
   return (
     <StyledivProfilePage className="ProfilePage container">
       <Navbar />
-      <StyleMyProfile className="myProfile">
-        <div className="myProfileWrapper">
-          <h1>
-            {isEdit ? <>Edit</>:<>My</> } <strong>Profile</strong>
-          </h1>
-          <div className="squareAssets"></div>
-        </div>
-        <button className="edit-profile" onClick={() => setIsEdit(!isEdit)}>
-          {isEdit ? (
-            <>
-              <ArrowBackIosIcon /> Go back to My Profile
-            </>
-          ) : (
-            <>
-              Edit profile <EditIcon />
-            </>
-          )}
-        </button>
-      </StyleMyProfile>
+      <MyProfileSection setIsEdit={setIsEdit} isEdit={isEdit}/>
 
       <StyleProfileWrapper className="profileWrapper">
         <StyleProfile>
@@ -122,46 +105,3 @@ const StyleProfileWrapper = styled.div`
 
 `;
 
-const StyleMyProfile = styled.div`
-  display: flex;
-  justify-content: end;
-  align-items: flex-end;
-
-  .edit-profile {
-    background-color: transparent;
-    border: none;
-    display: block;
-    text-decoration: underline;
-    padding-top: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
-
-  .myProfileWrapper {
-    display: flex;
-    width: 60%;
-    margin-right: 30px;
-    h1 {
-      width: 34%;
-      font-weight: 200;
-      font-size: 48px;
-
-      ${mq["tablet"]} {
-        width: 60%;
-      }
-
-      ${mq["mobile"]} {
-        width: 60%;
-      }
-    }
-
-    .squareAssets {
-      border-bottom: 5px solid black;
-      width: 77%;
-      ${mq["tablet"]} {
-        width: 40%;
-      }
-    }
-  }
-`;

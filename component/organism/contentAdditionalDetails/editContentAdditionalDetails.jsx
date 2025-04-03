@@ -2,65 +2,46 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import InputComponent from "@/component/atoms/input/input";
-import DropdownComponent from "@/component/atoms/dropdown/dropdownComponent";
 import ButtonComponent from "@/component/atoms/button/ButtonComponent";
+import InputDate from "@/component/atoms/input/inputDate";
+import DropdownComponent from "@/component/atoms/dropdown/dropdownComponent";
 
-const data = [
+const data= [
   {
-    name: 'Select salutation',
+    name: 'Marital status',
     value: '',
     icon: '',
   },
   {
-    name: 'Mr',
-    value: 'Mr',
+    name: 'Single',
+    value: 'single',
   },
   {
-    name: 'Mrs',
-    value: 'Mrs',
+    name: 'Married',
+    value: 'married',
   },
-  {
-    name: 'Ms',
-    value: 'Ms',
-  }
 ];
 
-const EditContentProfile = (props) => {
+const EditContentAdditionalDetails = (props) => {
   return (
     <StyleContentProfileWrapper>
-      <div className="imageWrapper">
-        <div className="image"></div>
-        <div className="attachWrapper">
-          <label htmlFor="attachment">Upload image</label>
-          <input
-            type="file"
-            id="attachment"
-            name="attachment"
-            accept=".jpg, .jpeg, .png"
-          />
-        </div>
-      </div>
       <div className="details">
         <div className="details-profile">
-          <DropdownComponent label="Salutation*" data={data}/>
+          <InputComponent className="flex" label="Home address*" required="true" />
         </div>
         <div className="details-profile">
-          <InputComponent
-            className="flex"
-            label="First name*"
-            required="true"
-          />
+          <InputComponent className="flex" label="Country*" required="true" />
         </div>
         <div className="details-profile">
-          <InputComponent className="flex" label="Last name*" required="true" />
+          <InputComponent className="flex" label="Postal code*" required="true" />
         </div>
         <div className="details-profile">
-          <InputComponent
-            className="flex"
-            label="Email address*"
-            required="true"
-          />
+          <InputDate className="flex" label="Date of birth" />
         </div>
+        <div className="details-profile">
+          <DropdownComponent label="Marital status*" data={data}/>
+        </div>
+
 
         <div className="buttonWrapper">
           <ButtonComponent className="btn-save">SAVE & UPDATE</ButtonComponent>
@@ -90,14 +71,6 @@ const StyleContentProfileWrapper = styled.div`
   }
 
   .imageWrapper {
-    .image {
-      background-image: url("/profile.png");
-      width: 100px;
-      height: 100px;
-      background-size: cover;
-      margin-right: 50px;
-    }
-
     .attachWrapper {
       position: relative;
 
@@ -129,4 +102,4 @@ const StyleContentProfileWrapper = styled.div`
   }
 `;
 
-export default EditContentProfile;
+export default EditContentAdditionalDetails;
