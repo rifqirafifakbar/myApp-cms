@@ -5,38 +5,22 @@ import InputComponent from "@/component/atoms/input/input";
 import ButtonComponent from "@/component/atoms/button/ButtonComponent";
 import DropdownComponent from "@/component/atoms/dropdown/dropdownComponent";
 
-const data = [
-  {
-    name: 'Select salutation',
-    value: '',
-    icon: '',
-  },
-  {
-    name: 'Mr',
-    value: 'Mr',
-  },
-  {
-    name: 'Mrs',
-    value: 'Mrs',
-  },
-  {
-    name: 'Ms',
-    value: 'Ms',
-  }
-];
 
-const EditContentSpouseDetails = (props) => {
+const EditContentPersonalPreferences= (props) => {
   return (
     <StyleContentProfileWrapper>
       <div className="details">
         <div className="details-profile">
-          <DropdownComponent label="Salutation" data={data}/>
+          <InputComponent className="flex" label="Hobbies and interests" />
         </div>
         <div className="details-profile">
-          <InputComponent className="flex" label="First name" />
+          <InputComponent className="flex" label="Favorite sport" />
         </div>
         <div className="details-profile">
-          <InputComponent className="flex" label="Last name" />
+          <InputComponent className="flex" label="Preferred music genre" />
+        </div>
+        <div className="details-profile">
+          <InputComponent className="flex" label="Preferred movie/TV show" />
         </div>
 
         <div className="buttonWrapper">
@@ -98,4 +82,4 @@ const StyleContentProfileWrapper = styled.div`
   }
 `;
 
-export default EditContentSpouseDetails;
+export default EditContentPersonalPreferences;

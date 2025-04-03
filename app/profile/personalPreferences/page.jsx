@@ -2,19 +2,19 @@
 
 import * as React from "react";
 import "../../global.scss";
-import Link from "next/link";
 import EditIcon from "@mui/icons-material/Edit";
 import styled from "@emotion/styled";
 import Navbar from "@/component/molecules/navbar/navbar";
 import { mq } from "@/styles/breakpoint";
-import ProfileNavbar from "@/component/atoms/profileNavbar/ProfileNavbar";
-import InputComponent from "@/component/atoms/input/input";
 import { useRouter } from 'next/navigation';
+import EditContentPersonalPreferences from "@/component/organism/contentPersonalPreferences/editContentPersonalPreferences";
+import ContentPersonalPreferences from "@/component/organism/contentPersonalPreferences/contentPersonalPreferences";
+import MyProfileSection from "@/component/molecules/myProfile/myProfile";
 
 
 export default function Profile() {
   const router = useRouter();
-  const [section, isSection] = React.useState(0);
+  const [isEdit, setIsEdit] = React.useState(false);
 
   const link = url => {
     if(url === '/profile') {
@@ -26,17 +26,7 @@ export default function Profile() {
   return (
     <StyledivProfilePage className="ProfilePage container">
       <Navbar />
-      <StyleMyProfile className="myProfile">
-        <div className="myProfileWrapper">
-          <h1>
-            My <strong>Profile</strong>
-          </h1>
-          <div className="squareAssets"></div>
-        </div>
-        <button className="edit-profile">
-          Edit profile <EditIcon />
-        </button>
-      </StyleMyProfile>
+      <MyProfileSection isEdit={isEdit} setIsEdit={setIsEdit} />
 
       <StyleProfileWrapper className="profileWrapper">
 
@@ -57,26 +47,11 @@ export default function Profile() {
           </ul>
         </StyleProfile>
 
-        <div className="contentProfileWrapper">
-          <div className="details">
-            <div className="details-profile">
-              <span className="title">Hobbies and interests</span>
-              <span className="content">Mr</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">Favorite sport</span>
-              <span className="content">John</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">Preferred music genre</span>
-              <span className="content">Mr</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">Preferred movie/TV show</span>
-              <span className="content">johndoe@anyemail.com</span>
-            </div>
-          </div>
-        </div>
+        {isEdit ? 
+          <EditContentPersonalPreferences />
+          : 
+          <ContentPersonalPreferences />
+        }
       </StyleProfileWrapper>
     </StyledivProfilePage>
   );
@@ -145,49 +120,6 @@ const StyleProfileWrapper = styled.div`
           display: block;
           margin-bottom: 10px;
         }
-      }
-    }
-  }
-`;
-
-const StyleMyProfile = styled.div`
-  display: flex;
-  justify-content: end;
-  align-items: flex-end;
-
-  .edit-profile {
-    background-color: transparent;
-    border: none;
-    display: block;
-    text-decoration: underline;
-    padding-top: 10px;
-    cursor: pointer;
-  }
-
-  .myProfileWrapper {
-    display: flex;
-    width: 60%;
-    margin-right: 30px;
-    h1 {
-      width: 34%;
-      font-weight: 200;
-      font-size: 48px;
-
-      ${mq['tablet']} {
-        width: 60%;
-      }
-
-      ${mq['mobile']} {
-        width: 60%;
-      }
-
-    }
-
-    .squareAssets {
-      border-bottom: 5px solid black;
-      width: 77%;
-      ${mq['tablet']} {
-        width: 40%;
       }
     }
   }
