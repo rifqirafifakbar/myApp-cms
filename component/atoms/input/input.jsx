@@ -15,7 +15,7 @@ const InputComponent = (props) => {
     setText(e.target.value);
   };
   return (
-    <StyleFormControl>
+    <StyleFormControl {...props}>
       {props.label ? 
         <FormLabel>{props.label}</FormLabel> : ''
       }
@@ -27,10 +27,6 @@ const InputComponent = (props) => {
 };
 
 
-
-const StyleFormHelperText = styled(FormHelperText)`
-  width: 100%;
-`;
 
 
 export default InputComponent;

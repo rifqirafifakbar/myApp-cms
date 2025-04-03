@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import * as React from "react";
 import "../global.scss";
@@ -7,18 +7,22 @@ import EditIcon from "@mui/icons-material/Edit";
 import styled from "@emotion/styled";
 import Navbar from "@/component/molecules/navbar/navbar";
 import { mq } from "@/styles/breakpoint";
-import ProfileNavbar from "@/component/atoms/profileNavbar/ProfileNavbar";
-import InputComponent from "@/component/atoms/input/input";
-import { useRouter } from 'next/navigation';
-
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { useRouter } from "next/navigation";
+import ContentProfile from "@/component/organism/contentProfile/contentProfile";
+import EditContentProfile from "@/component/organism/contentProfile/editContentProfile";
 
 export default function Profile() {
   const router = useRouter();
-  const [section, isSection] = React.useState(0);
+  const [section, setIsSection] = React.useState(0);
+  const [isEdit, setIsEdit] = React.useState(false);
 
-  const link = url => {
-    return  router.push(`/profile${url}`);
-  }
+  const link = (url) => {
+    if (url === "/profile") {
+      return router.push(url);
+    }
+    return router.push(`/profile${url}`);
+  };
 
   return (
     <StyledivProfilePage className="ProfilePage container">
@@ -26,60 +30,57 @@ export default function Profile() {
       <StyleMyProfile className="myProfile">
         <div className="myProfileWrapper">
           <h1>
-            My <strong>Profile</strong>
+            {isEdit ? <>Edit</>:<>My</> } <strong>Profile</strong>
           </h1>
           <div className="squareAssets"></div>
         </div>
-        <button className="edit-profile">
-          Edit profile <EditIcon />
+        <button className="edit-profile" onClick={() => setIsEdit(!isEdit)}>
+          {isEdit ? (
+            <>
+              <ArrowBackIosIcon /> Go back to My Profile
+            </>
+          ) : (
+            <>
+              Edit profile <EditIcon />
+            </>
+          )}
         </button>
       </StyleMyProfile>
 
       <StyleProfileWrapper className="profileWrapper">
         <StyleProfile>
           <ul>
-            <li className={section === 0 ? 'active' : ''}>
-              <span onClick={() => link('/profile')}>Basic Details</span> 
+            <li className={section === 0 ? "active" : ""}>
+              <span onClick={() => link("/profile")}>Basic Details</span>
             </li>
-            <li className={section === 1 ? 'active' : ''}>
-              <span onClick={() => link('/additionalDetails')}>Additional Details</span>
+            <li className={section === 1 ? "active" : ""}>
+              <span onClick={() => link("/additionalDetails")}>
+                Additional Details
+              </span>
             </li>
-            <li className={section === 2 ? 'active' : ''}>
-              <span onClick={() => link('/spouseDetails')}>Spouse Details</span>
+            <li className={section === 2 ? "active" : ""}>
+              <span onClick={() => link("/spouseDetails")}>Spouse Details</span>
             </li>
-            <li className={section === 3 ? 'active' : ''}>
-              <span onClick={() => link('/personalPreferences')}>Personal Preferences</span>
+            <li className={section === 3 ? "active" : ""}>
+              <span onClick={() => link("/personalPreferences")}>
+                Personal Preferences
+              </span>
             </li>
           </ul>
         </StyleProfile>
 
-        <div className="contentProfileWrapper">
-          <div className="image"></div>
-          <div className="details">
-            <div className="details-profile">
-              <span className="title">Salutation*</span>
-              <span className="content">Mr</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">First name*</span>
-              <span className="content">John</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">Last name</span>
-              <span className="content">Mr</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">Email address*</span>
-              <span className="content">johndoe@anyemail.com</span>
-            </div>
-          </div>
-        </div>
+        {isEdit ? 
+          <EditContentProfile />
+          : 
+          <ContentProfile />
+        }
+
       </StyleProfileWrapper>
     </StyledivProfilePage>
   );
 }
 
-const StyleProfile= styled.div`
+const StyleProfile = styled.div`
   width: 30%;
   text-align: justify;
 
@@ -119,32 +120,6 @@ const StyleProfileWrapper = styled.div`
   margin-top: 50px;
   gap: 50px;
 
-  .contentProfileWrapper {
-    text-align: left;
-    display: flex;
-
-    .image {
-      background-image: url("/profile.png");
-      width: 100px;
-      height: 100px;
-      background-size: cover;
-      margin-right: 50px;
-    }
-
-    .details {
-      .details-profile {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 30px;
-
-        .title {
-          font-weight: 600;
-          display: block;
-          margin-bottom: 10px;
-        }
-      }
-    }
-  }
 `;
 
 const StyleMyProfile = styled.div`
@@ -159,6 +134,8 @@ const StyleMyProfile = styled.div`
     text-decoration: underline;
     padding-top: 10px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
   }
 
   .myProfileWrapper {
@@ -170,20 +147,19 @@ const StyleMyProfile = styled.div`
       font-weight: 200;
       font-size: 48px;
 
-      ${mq['tablet']} {
+      ${mq["tablet"]} {
         width: 60%;
       }
 
-      ${mq['mobile']} {
+      ${mq["mobile"]} {
         width: 60%;
       }
-
     }
 
     .squareAssets {
       border-bottom: 5px solid black;
       width: 77%;
-      ${mq['tablet']} {
+      ${mq["tablet"]} {
         width: 40%;
       }
     }
