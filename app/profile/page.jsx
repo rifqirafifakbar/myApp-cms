@@ -12,11 +12,14 @@ import { useRouter } from "next/navigation";
 import ContentProfile from "@/component/organism/contentProfile/contentProfile";
 import EditContentProfile from "@/component/organism/contentProfile/editContentProfile";
 import MyProfileSection from "@/component/molecules/myProfile/myProfile";
+import axios from "axios";
+import { getLocalStorage } from "@/src/utils/localstorage";
 
 export default function Profile() {
   const router = useRouter();
   const [section, setIsSection] = React.useState(0);
   const [isEdit, setIsEdit] = React.useState(false);
+  const [data, setData] = React.useState(false);
 
   const link = (url) => {
     if (url === "/profile") {
@@ -24,6 +27,25 @@ export default function Profile() {
     }
     return router.push(`/profile${url}`);
   };
+
+  const getData = async () => {
+    const id = getLocalStorage(); 
+
+    try {
+      const response = await axios.get(`https://api.backendless.com/E9CD262C-3DC6-48EE-B5CC-FCF044E3CE94/33513148-B3F6-491D-9033-344F76DE21D3/users/${id}`);
+      if(response.status === 200) {
+        const {data} = response;
+        console.log(data);
+        setData(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }    
+  }
+
+  React.useEffect(() => {
+    getData();
+  },[])
 
   return (
     <StyledivProfilePage className="ProfilePage container">
@@ -53,9 +75,9 @@ export default function Profile() {
         </StyleProfile>
 
         {isEdit ? 
-          <EditContentProfile />
+          <EditContentProfile data={data}/>
           : 
-          <ContentProfile />
+          <ContentProfile data={data}/>
         }
 
       </StyleProfileWrapper>

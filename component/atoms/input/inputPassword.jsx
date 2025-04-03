@@ -26,8 +26,7 @@ const InputPassword = (props) => {
   };
 
   const handlerInput = (e) => {
-    console.log(e.target.value)
-    setText(e.target.value);
+    props.handlerChange(e.target.value);
   };
 
   return (
@@ -38,7 +37,7 @@ const InputPassword = (props) => {
       <StyleInput 
         onChange={handlerInput}
         type={showPassword ? "text" : "password"}
-        value={Text}
+        value={props.value}
         endDecorator={
           <InputAdornment position="end">
             <IconButton
