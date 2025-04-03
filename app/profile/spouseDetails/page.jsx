@@ -2,19 +2,18 @@
 
 import * as React from "react";
 import "../../global.scss";
-import Link from "next/link";
-import EditIcon from "@mui/icons-material/Edit";
 import styled from "@emotion/styled";
 import Navbar from "@/component/molecules/navbar/navbar";
 import { mq } from "@/styles/breakpoint";
-import ProfileNavbar from "@/component/atoms/profileNavbar/ProfileNavbar";
-import InputComponent from "@/component/atoms/input/input";
 import { useRouter } from 'next/navigation';
+import MyProfileSection from "@/component/molecules/myProfile/myProfile";
+import EditContentSpouseDetails from "@/component/organism/contentSpouseDetails/editContentSpouseDetails";
+import ContentSpouseDetails from "@/component/organism/contentSpouseDetails/contentSpouseDetails";
 
 
 export default function Profile() {
   const router = useRouter();
-  const [section, isSection] = React.useState(0);
+  const [isEdit, setIsEdit] = React.useState(false);
 
   const link = url => {
     if(url === '/profile') {
@@ -26,17 +25,7 @@ export default function Profile() {
   return (
     <StyledivProfilePage className="ProfilePage container">
       <Navbar />
-      <StyleMyProfile className="myProfile">
-        <div className="myProfileWrapper">
-          <h1>
-            My <strong>Profile</strong>
-          </h1>
-          <div className="squareAssets"></div>
-        </div>
-        <button className="edit-profile">
-          Edit profile <EditIcon />
-        </button>
-      </StyleMyProfile>
+      <MyProfileSection isEdit={isEdit} setIsEdit={setIsEdit} />
 
       <StyleProfileWrapper className="profileWrapper">
 
@@ -57,22 +46,11 @@ export default function Profile() {
           </ul>
         </StyleProfile>
 
-        <div className="contentProfileWrapper">
-          <div className="details">
-            <div className="details-profile">
-              <span className="title">Salutation*</span>
-              <span className="content">Mr</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">First name*</span>
-              <span className="content">John</span>
-            </div>
-            <div className="details-profile">
-              <span className="title">Last name</span>
-              <span className="content">Mr</span>
-            </div>
-          </div>
-        </div>
+        {isEdit ? 
+          <EditContentSpouseDetails />
+          : 
+          <ContentSpouseDetails />
+        }
       </StyleProfileWrapper>
     </StyledivProfilePage>
   );
