@@ -6,7 +6,7 @@ import DropdownComponent from "@/component/atoms/dropdown/dropdownComponent";
 import ButtonComponent from "@/component/atoms/button/ButtonComponent";
 import useDataStore from "@/src/store/dataStore";
 
-const data = [
+const dataDropdown = [
   {
     name: 'Select salutation',
     value: '',
@@ -45,7 +45,7 @@ const EditContentProfile = () => {
       </div>
       <div className="details">
         <div className="details-profile">
-          <DropdownComponent label="Salutation*" data={data}/>
+          <DropdownComponent label="Salutation*" data={dataDropdown}/>
         </div>
         <div className="details-profile">
           <InputComponent

@@ -10,65 +10,50 @@ import styled from "@emotion/styled";
 import React from "react";
 import { setCookie } from "@/src/utils/cookie";
 import { setLocalStorage } from "@/src/utils/localstorage";
+import { API_APLICATION_ID, API_KEY, BACKEND_PUBLIC_API_BASE_URL } from "@/src/utils/api";
 
 export default function Login() {
   const router = useRouter();
   const [email, isEmail] = React.useState(0);
   const [password, isPassword] = React.useState("");
 
-  process.env.BACKEND_PUBLIC_API_BASE_URL;
-
-  const handlerLogin = async () => {
+  const handlerRegister= async () => {
     const data = {
-      login: email,
-      password: password,
-    };
+      "email": email,
+      "password": password,
+    }
 
     try {
-      const response = await axios.post(
-        `https://api.backendless.com/E9CD262C-3DC6-48EE-B5CC-FCF044E3CE94/33513148-B3F6-491D-9033-344F76DE21D3/users/login`,
-        data
-      );
-
-      if (response.status === 200) {
-        const { data } = response;
-        setCookie(data["user-token"]);
-        setLocalStorage(data["objectId"]);
-        return router.push("/profile");
+      const response = await axios.post(`${BACKEND_PUBLIC_API_BASE_URL}/${API_APLICATION_ID}/${API_KEY}/users/register`, data);
+      
+      if(response.status === 200) {
+        return  router.push("/login");
       }
     } catch (error) {
       console.error(error);
-    }
+    }    
   };
+
 
   return (
     <StyledivLoginPage className="loginPage">
-      <div className="loginWrapper">
+      <div className="registerWrapper">
         <span className="title">
           Welcome to my <strong>myApp</strong>
         </span>
-        <InputComponent
-          label="User ID*"
-          handlerChange={isEmail}
-          value={email}
-        />
+        <InputComponent label="User ID*" handlerChange={isEmail} value={email} />
         <InputPassword
           label="Password*"
           handlerChange={isPassword}
           value={password}
         />
 
-        <div className="CheckboxWrapper">
-          <input type="checkbox" name="checkbox" id="checkbox" />
-          <label htmlFor="checkbox">Keep me logged in</label>
-        </div>
-
-        <ButtonComponent className="btn-login" onClick={() => handlerLogin()}>
-          Login
+        <ButtonComponent className="btn-login" onClick={() => handlerRegister()}>
+          Register
         </ButtonComponent>
 
         <span>
-          No account ? <Link href="/register">Register here</Link>{" "}
+          Have account ? <Link href="/login">Login here</Link>{" "}
         </span>
       </div>
     </StyledivLoginPage>
@@ -76,25 +61,17 @@ export default function Login() {
 }
 
 const StyledivLoginPage = styled.div`
-  .loginWrapper {
+  .registerWrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
     align-items: center;
   }
-
-  .CheckboxWrapper {
-    margin: 25px 20px 25px 0;
-
-    label {
-      margin-left: 20px;
-    }
-  }
-
+    
   .btn-login {
     width: 25%;
-    margin-bottom: 20px;
+    margin: 20px 0;
   }
 
   span {
