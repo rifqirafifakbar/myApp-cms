@@ -1,11 +1,13 @@
+'use client'
+
 const breakpoints = {
-    mobile: '480px',
-    tablet: '768px',
-    desktop: '1024px',
+    mobile: '720px',
+    tablet: '1200px',
+    desktop: '1400px',
 };
 
 export const mq = Object.keys(breakpoints).reduce((acc, key) => {
-    acc[key] = `@media (min-width: ${breakpoints[key]})`;
+    acc[key] = `@media (max-width: ${breakpoints[key]})`;
     return acc;
 }, {});
   
