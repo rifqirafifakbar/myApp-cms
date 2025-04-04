@@ -23,7 +23,7 @@ const ContentAdditionalDetails = (props) => {
         </div>
         <div className="details-profile">
           <span className="title">Date of birth</span>
-          <span className="content">{dayjs(data?.birth_date ?? '').format('DD/MM/YYYY')}</span>
+          <span className="content">{data?.birth_date ? dayjs(data?.birth_date).format('DD/MM/YYYY') : ''}</span>
         </div>
         <div className="details-profile">
           <span className="title">Marital status</span>

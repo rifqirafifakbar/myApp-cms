@@ -8,8 +8,9 @@ import InputComponent from "@/component/atoms/input/input";
 import ButtonComponent from "@/component/atoms/button/ButtonComponent";
 import InputDate from "@/component/atoms/input/inputDate";
 import DropdownComponent from "@/component/atoms/dropdown/dropdownComponent";
+import dayjs from "dayjs";
 
-const data = [
+const dataStatus = [
   {
     name: "Marital status",
     value: "",
@@ -43,14 +44,22 @@ const validate = (values) => {
 };
 
 const EditContentAdditionalDetails = (props) => {
-  const { setData } = useDataStore();
+  const { data, setData } = useDataStore();
+  const [date, setDate] = React.useState(data.birth_date ?? '');
 
   const postData = async (values) => {
-    const response = await usePostData(values);
+    let dataFormik = values;
+    dataFormik.birth_date = date;
+
+    const response = await usePostData(dataFormik);
     if (response) {
       setData(response);
       props?.setIsEdit(false);
     }
+  };
+
+  const handlerValue = (newValue) => {
+    setDate(dayjs(newValue).format("DD/MM/YYYY"));
   };
 
   const formik = useFormik({
@@ -73,7 +82,9 @@ const EditContentAdditionalDetails = (props) => {
         <div className="details">
           <div
             className={`${
-              formik.errors.address ? "details-profile error" : "details-profile"
+              formik.errors.address
+                ? "details-profile error"
+                : "details-profile"
             }`}
           >
             <InputComponent
@@ -91,7 +102,9 @@ const EditContentAdditionalDetails = (props) => {
           </div>
           <div
             className={`${
-              formik.errors.country ? "details-profile error" : "details-profile"
+              formik.errors.country
+                ? "details-profile error"
+                : "details-profile"
             }`}
           >
             <InputComponent
@@ -109,7 +122,9 @@ const EditContentAdditionalDetails = (props) => {
           </div>
           <div
             className={`${
-              formik.errors.postal_code ? "details-profile error" : "details-profile"
+              formik.errors.postal_code
+                ? "details-profile error"
+                : "details-profile"
             }`}
           >
             <InputComponent
@@ -129,8 +144,8 @@ const EditContentAdditionalDetails = (props) => {
             <InputDate
               className="flex"
               label="Date of birth"
-              handlerChange={formik.handleChange}
-              onValue={formik.values.birth_date}
+              handlerChange={handlerValue}
+              onValue={formik.values.martial_status}
               name={"birth_date"}
               id={"birth_date"}
             />
@@ -138,7 +153,7 @@ const EditContentAdditionalDetails = (props) => {
           <div className="details-profile">
             <DropdownComponent
               label="Marital status"
-              data={data}
+              data={dataStatus}
               handlerChange={formik.handleChange}
               onValue={formik.values.martial_status}
               name={"martial_status"}
@@ -150,7 +165,12 @@ const EditContentAdditionalDetails = (props) => {
             <ButtonComponent className="btn-save" type="submit">
               SAVE & UPDATE
             </ButtonComponent>
-            <ButtonComponent className="btn-cancel" onClick={(e)=> props.setIsEdit(false)}>CANCEL</ButtonComponent>
+            <ButtonComponent
+              className="btn-cancel"
+              onClick={(e) => props.setIsEdit(false)}
+            >
+              CANCEL
+            </ButtonComponent>
           </div>
 
           <span className="mandatory">* mandatory field</span>

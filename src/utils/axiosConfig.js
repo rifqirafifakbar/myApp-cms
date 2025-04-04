@@ -10,7 +10,7 @@ export const useFetchUserData = () => {
   const { setData, data } = useDataStore();
   useEffect(() => {
     const fetchData = async () => {
-      if (id) {
+      if (!data && id) {
         try {
           const response = await axios.get(
             `${BACKEND_PUBLIC_API_BASE_URL}/${API_APLICATION_ID}/${API_KEY}/users/${id}`
@@ -29,12 +29,12 @@ export const useFetchUserData = () => {
 };
 
 export const usePostData = async (dataBody) => {
-
   if (id) {
     try {
       const response = await axios.put(
         `${BACKEND_PUBLIC_API_BASE_URL}/${API_APLICATION_ID}/${API_KEY}/users/${id}`, dataBody
       );
+      
       if (response.status === 200) {
         return response.data;
       }

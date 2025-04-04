@@ -29,12 +29,12 @@ const Sidebar = (props) => {
             Additional Details
           </span>
         </li>
-        {data.martial_status !== "Single" ? (
-          <li className={props.linkActive === "/spouseDetails" ? "active" : ""}>
-            <span onClick={() => link("/spouseDetails")}>Spouse Details</span>
-          </li>
-        ) : (
+        {data.martial_status === "Single" || data.martial_status === 'single' || !data.martial_status ? (
           ""
+        ) : (
+          <li className={props.linkActive === "/spouseDetails" ? "active" : ""}>
+          <span onClick={() => link("/spouseDetails")}>Spouse Details</span>
+        </li>
         )}
         <li
           className={
