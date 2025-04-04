@@ -1,5 +1,8 @@
 "use client";
 import * as React from "react";
+import useDataStore from "@/src/store/dataStore";
+import { useFormik } from "formik";
+import { usePostData } from "@/src/utils/axiosConfig";
 import styled from "@emotion/styled";
 import InputComponent from "@/component/atoms/input/input";
 import ButtonComponent from "@/component/atoms/button/ButtonComponent";
@@ -7,45 +10,91 @@ import DropdownComponent from "@/component/atoms/dropdown/dropdownComponent";
 
 const data = [
   {
-    name: 'Select salutation',
-    value: '',
-    icon: '',
+    name: "Select salutation",
+    value: "",
+    icon: "",
   },
   {
-    name: 'Mr',
-    value: 'Mr',
+    name: "Mr",
+    value: "Mr",
   },
   {
-    name: 'Mrs',
-    value: 'Mrs',
+    name: "Mrs",
+    value: "Mrs",
   },
   {
-    name: 'Ms',
-    value: 'Ms',
-  }
+    name: "Ms",
+    value: "Ms",
+  },
 ];
 
 const EditContentSpouseDetails = (props) => {
+  const { setData } = useDataStore();
+
+  const postData = async (values) => {
+    const response = await usePostData(values);
+    if (response) {
+      setData(response);
+      props?.setIsEdit(false);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      spouse_salutation: "",
+      spouse_first_name: "",
+      spouse_last_name: "",
+    },
+    onSubmit: (values) => {
+      postData(values);
+    },
+  });
+
   return (
     <StyleContentProfileWrapper>
-      <div className="details">
-        <div className="details-profile">
-          <DropdownComponent label="Salutation" data={data}/>
-        </div>
-        <div className="details-profile">
-          <InputComponent className="flex" label="First name" />
-        </div>
-        <div className="details-profile">
-          <InputComponent className="flex" label="Last name" />
-        </div>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="details">
+          <div className="details-profile">
+            <DropdownComponent
+              label="Salutation"
+              data={data}
+              handlerChange={formik.handleChange}
+              onValue={formik.values.spouse_salutation}
+              name={"spouse_salutation"}
+              id={"spouse_salutation"}
+            />
+          </div>
+          <div className="details-profile">
+            <InputComponent
+              className="flex"
+              label="First name"
+              handlerChange={formik.handleChange}
+              onValue={formik.values.spouse_first_name}
+              name={"spouse_first_name"}
+              id={"spouse_first_name"}
+            />
+          </div>
+          <div className="details-profile">
+            <InputComponent
+              className="flex"
+              label="Last name"
+              handlerChange={formik.handleChange}
+              onValue={formik.values.spouse_last_name}
+              name={"spouse_last_name"}
+              id={"spouse_last_name"}
+            />
+          </div>
 
-        <div className="buttonWrapper">
-          <ButtonComponent className="btn-save">SAVE & UPDATE</ButtonComponent>
-          <ButtonComponent className="btn-cancel">CANCEL</ButtonComponent>
-        </div>
+          <div className="buttonWrapper">
+            <ButtonComponent className="btn-save" type="submit">
+              SAVE & UPDATE
+            </ButtonComponent>
+            <ButtonComponent className="btn-cancel" onClick={(e)=> props.setIsEdit(false)}>CANCEL</ButtonComponent>
+          </div>
 
-        <span className="mandatory">* mandatory field</span>
-      </div>
+          <span className="mandatory">* mandatory field</span>
+        </div>
+      </form>
     </StyleContentProfileWrapper>
   );
 };

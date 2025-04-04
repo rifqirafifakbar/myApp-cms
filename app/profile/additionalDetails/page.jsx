@@ -9,6 +9,9 @@ import MyProfileSection from "@/component/molecules/myProfile/myProfile";
 import EditContentAdditionalDetails from "@/component/organism/contentAdditionalDetails/editContentAdditionalDetails";
 import ContentAdditionalDetails from "@/component/organism/contentAdditionalDetails/contentAdditionalDetails";
 import { useFetchUserData } from "@/src/utils/axiosConfig";
+import Sidebar from "@/component/atoms/sidebar/sidebar";
+import { mq } from "@/styles/breakpoint";
+import { checkUserLogin } from "@/src/utils/checkId";
 
 
 export default function Profile() {
@@ -16,76 +19,27 @@ export default function Profile() {
   const [isEdit, setIsEdit] = React.useState(false);
   const [data, setData] = React.useState(false);
   useFetchUserData();
-  const link = url => {
-    if(url === '/profile') {
-      return router.push(url);
-    }
-    return  router.push(`/profile${url}`);
-  }
+  checkUserLogin();
 
   return (
-    <StyledivProfilePage className="ProfilePage container">
+    <StyledivAdditionalDetails className="additionalDetails container">
       <Navbar />
       <MyProfileSection isEdit={isEdit} setIsEdit={setIsEdit} />
 
       <StyleProfileWrapper className="profileWrapper">
-
-        <StyleProfile>
-          <ul>
-            <li>
-              <span onClick={() => link('/profile')}>Basic Details</span> 
-            </li>
-            <li className="active">
-              <span onClick={() => link('/additionalDetails')}>Additional Details</span>
-            </li>
-            <li>
-              <span onClick={() => link('/spouseDetails')}>Spouse Details</span>
-            </li>
-            <li>
-              <span onClick={() => link('/personalPreferences')}>Personal Preferences</span>
-            </li>
-          </ul>
-        </StyleProfile>
+        <Sidebar linkActive={'/additionalDetails'} />
 
         {isEdit ? 
-          <EditContentAdditionalDetails/>
+          <EditContentAdditionalDetails setIsEdit={setIsEdit}/>
           : 
           <ContentAdditionalDetails/>
         }
       </StyleProfileWrapper>
-    </StyledivProfilePage>
+    </StyledivAdditionalDetails>
   );
 }
 
-const StyleProfile= styled.div`
-  width: 30%;
-  text-align: justify;
-
-  ul {
-    list-style-type: none;
-
-    li {
-      padding: 10px 0;
-      border-bottom: 1px solid black;
-      cursor: pointer;
-
-      span {
-        padding: 20px 0;
-      }
-
-      &.active {
-        border-bottom: 2px solid black;
-        font-weight: 600;
-      }
-    }
-
-    li:first-of-type {
-      border-top: 1px solid black;
-    }
-  }
-`;
-
-const StyledivProfilePage = styled.div`
+const StyledivAdditionalDetails = styled.div`
   display: flex;
   text-align: center;
   height: 100vh;
@@ -97,6 +51,10 @@ const StyleProfileWrapper = styled.div`
   margin-top: 50px;
   gap: 50px;
 
+  ${mq["mobile"]} {
+    flex-direction: column;
+  }
+    
   .contentProfileWrapper {
     text-align: left;
     display: flex;

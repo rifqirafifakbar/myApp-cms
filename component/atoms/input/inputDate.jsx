@@ -13,9 +13,10 @@ const InputDate = (props) => {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateTimeField
             format="DD/MM/YYYY"
-        //   value={value}
-        //   onChange={(newValue) => setValue(newValue)}
+            onChange={(newValue) => props.handlerChange('12/10/1000')}
             className="inputDate"
+            name={props.name}
+            id={props.id}
         />
       </LocalizationProvider>
     </StyleFormControl>

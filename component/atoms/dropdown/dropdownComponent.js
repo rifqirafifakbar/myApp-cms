@@ -17,6 +17,7 @@ const DropdownComponent = (props) => {
   const [data, setData] = React.useState(props.data || dataDummy);
   const handleChange = (event) => {
     setSelect(event.target.value);
+    props?.handlerChange(event);
   };
 
   return (
@@ -33,7 +34,7 @@ const DropdownComponent = (props) => {
           onChange={handleChange}
           displayEmpty
           inputProps={{ "aria-label": "Without label" }}
-          required
+          name={props?.name ?? ''} id={props?.id ?? ''}
         >
           {data.length ? data.map((item,idx) => {
             return (

@@ -5,73 +5,181 @@ import InputComponent from "@/component/atoms/input/input";
 import DropdownComponent from "@/component/atoms/dropdown/dropdownComponent";
 import ButtonComponent from "@/component/atoms/button/ButtonComponent";
 import useDataStore from "@/src/store/dataStore";
+import { useFormik } from "formik";
+import { usePostData } from "@/src/utils/axiosConfig";
 
 const dataDropdown = [
   {
-    name: 'Select salutation',
-    value: '',
-    icon: '',
+    name: "Select salutation",
+    value: "",
+    icon: "",
   },
   {
-    name: 'Mr',
-    value: 'Mr',
+    name: "Mr",
+    value: "Mr",
   },
   {
-    name: 'Mrs',
-    value: 'Mrs',
+    name: "Mrs",
+    value: "Mrs",
   },
   {
-    name: 'Ms',
-    value: 'Ms',
-  }
+    name: "Ms",
+    value: "Ms",
+  },
 ];
 
-const EditContentProfile = () => {
-  const { data } = useDataStore();
+const validate = (values) => {
+  const errors = {};
+  if (!values.firstName) {
+    errors.firstName = "Please select your first name";
+  }
+
+  if (!values.lastName) {
+    errors.lastName = "Please select your last name";
+  }
+
+  if (!values.email) {
+    errors.email = "Please select your email";
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = "Invalid email address";
+  }
+
+  if (!values.salutation) {
+    errors.salutation = "Please select your salutation";
+  }
+
+  return errors;
+};
+
+const EditContentProfile = (props) => {
+  const { setData } = useDataStore();
+
+  const postData = async (values) =>{
+    const response = await usePostData(values);
+    if (response){
+      setData(response);
+      props?.setIsEdit(false);
+    }
+  }
+
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      salutation: "",
+    },
+    validate,
+    onSubmit: (values) => {
+      postData(values);
+    },
+  });
 
   return (
     <StyleContentProfileWrapper>
-      <div className="imageWrapper">
-        <div className="image"></div>
-        <div className="attachWrapper">
-          <label htmlFor="attachment">Upload image</label>
-          <input
-            type="file"
-            id="attachment"
-            name="attachment"
-            accept=".jpg, .jpeg, .png"
-          />
-        </div>
-      </div>
-      <div className="details">
-        <div className="details-profile">
-          <DropdownComponent label="Salutation*" data={dataDropdown}/>
-        </div>
-        <div className="details-profile">
-          <InputComponent
-            className="flex"
-            label="First name*"
-            required="true"
-          />
-        </div>
-        <div className="details-profile">
-          <InputComponent className="flex" label="Last name*" required="true" />
-        </div>
-        <div className="details-profile">
-          <InputComponent
-            className="flex"
-            label="Email address*"
-            required="true"
-          />
+      <form onSubmit={formik.handleSubmit}>
+        <div className="imageWrapper">
+          <div className="image"></div>
+          <div className="attachWrapper">
+            <label htmlFor="attachment">Upload image</label>
+            <input
+              type="file"
+              id="attachment"
+              name="attachment"
+              accept=".jpg, .jpeg, .png"
+            />
+          </div>
         </div>
 
-        <div className="buttonWrapper">
-          <ButtonComponent className="btn-save">SAVE & UPDATE</ButtonComponent>
-          <ButtonComponent className="btn-cancel">CANCEL</ButtonComponent>
-        </div>
+        <div className="details">
+          <div
+            className={`${
+              formik.errors.salutation
+                ? "details-profile error"
+                : "details-profile"
+            }`}
+          >
+            <DropdownComponent
+              label="Salutation*"
+              data={dataDropdown}
+              handlerChange={formik.handleChange}
+              onValue={formik.values.salutation}
+              name={"salutation"}
+              id={"salutation"}
+            />
+            {formik.errors.salutation ? (
+              <span className="error-msg">{formik.errors.salutation}</span>
+            ) : null}
+          </div>
+          <div
+            className={`${
+              formik.errors.firstName
+                ? "details-profile error"
+                : "details-profile"
+            }`}
+          >
+            <InputComponent
+              className="flex"
+              label="First name*"
+              required="true"
+              handlerChange={formik.handleChange}
+              onValue={formik.values.firstName}
+              name={"firstName"}
+              id={"firstName"}
+            />
+            {formik.errors.firstName ? (
+              <span className="error-msg">{formik.errors.firstName}</span>
+            ) : null}
+          </div>
+          <div
+            className={`${
+              formik.errors.lastName
+                ? "details-profile error"
+                : "details-profile"
+            }`}
+          >
+            <InputComponent
+              className="flex"
+              label="Last name*"
+              required="true"
+              handlerChange={formik.handleChange}
+              onValue={formik.values.lastName}
+              name={"lastName"}
+              id={"lastName"}
+            />
+            {formik.errors.lastName ? (
+              <span className="error-msg">{formik.errors.lastName}</span>
+            ) : null}
+          </div>
+          <div
+            className={`${
+              formik.errors.email ? "details-profile error" : "details-profile"
+            }`}
+          >
+            <InputComponent
+              className="flex"
+              label="Email address*"
+              required="true"
+              handlerChange={formik.handleChange}
+              onValue={formik.values.email}
+              name={"email"}
+              id={"email"}
+            />
+            {formik.errors.email ? (
+              <span className="error-msg">{formik.errors.email}</span>
+            ) : null}
+          </div>
 
-        <span className="mandatory">* mandatory field</span>
-      </div>
+          <div className="buttonWrapper">
+            <ButtonComponent className="btn-save" type="submit">
+              SAVE & UPDATE
+            </ButtonComponent>
+            <ButtonComponent className="btn-cancel" onClick={(e)=> props.setIsEdit(false)}>CANCEL</ButtonComponent>
+          </div>
+
+          <span className="mandatory">* mandatory field</span>
+        </div>
+      </form>
     </StyleContentProfileWrapper>
   );
 };
@@ -122,6 +230,19 @@ const StyleContentProfileWrapper = styled.div`
       display: flex;
       flex-direction: column;
       margin-bottom: 20px;
+
+      &.error {
+        .error-msg {
+          margin-top: 5px;
+          color: red;
+        }
+
+        fieldset,
+        .MuiInputBase-root,
+        .MuiInput-root {
+          border: 1px solid red;
+        }
+      }
 
       .title {
         font-weight: 600;

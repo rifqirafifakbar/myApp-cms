@@ -10,68 +10,91 @@ import styled from "@emotion/styled";
 import React from "react";
 import { setCookie } from "@/src/utils/cookie";
 import { setLocalStorage } from "@/src/utils/localstorage";
+import { useFormik } from "formik";
+import { useloginData } from "@/src/utils/axiosConfig";
+import Navbar from "@/component/molecules/navbar/navbar";
+import useDataStore from "@/src/store/dataStore";
 
 export default function Login() {
   const router = useRouter();
-  const [email, isEmail] = React.useState(0);
-  const [password, isPassword] = React.useState("");
+  const [isWarning, setIsWarning] = React.useState(false);
+  const { setData } = useDataStore();
 
-  process.env.BACKEND_PUBLIC_API_BASE_URL;
+  const loginData = async (values) =>{
+    const response = await useloginData(values);
+    if (response){
+      const data = response;
+      setCookie(data["user-token"]);
+      setLocalStorage(data["objectId"]);
+      setData(data);
+      return router.push("/profile");
 
-  const handlerLogin = async () => {
-    const data = {
-      login: email,
-      password: password,
-    };
+    }else {
+      setIsWarning(true);
 
-    try {
-      const response = await axios.post(
-        `https://api.backendless.com/E9CD262C-3DC6-48EE-B5CC-FCF044E3CE94/33513148-B3F6-491D-9033-344F76DE21D3/users/login`,
-        data
-      );
-
-      if (response.status === 200) {
-        const { data } = response;
-        setCookie(data["user-token"]);
-        setLocalStorage(data["objectId"]);
-        return router.push("/profile");
-      }
-    } catch (error) {
-      console.error(error);
+      setTimeout(() => {
+        setIsWarning(false);
+      }, 3000);
     }
-  };
+  }
+
+  const formik = useFormik({
+    initialValues: {
+      login: "",
+      password: "",
+    },
+    onSubmit: (values) => {
+      loginData(values);
+    },
+  });
 
   return (
-    <StyledivLoginPage className="loginPage">
-      <div className="loginWrapper">
-        <span className="title">
-          Welcome to my <strong>myApp</strong>
-        </span>
-        <InputComponent
-          label="User ID*"
-          handlerChange={isEmail}
-          value={email}
-        />
-        <InputPassword
-          label="Password*"
-          handlerChange={isPassword}
-          value={password}
-        />
+    <>
+      <Navbar isLoginLogout={true} />
+      <StyledivLoginPage className="loginPage">
+        <div className="loginWrapper">
+          <span className="title">
+            Welcome to my <strong>myApp</strong>
+          </span>
+          <form onSubmit={formik.handleSubmit}>
+            <InputComponent
+              label="User ID*"
+              handlerChange={formik.handleChange}
+              onValue={formik.values.login}
+              name={"login"}
+              id={"login"}
+            />
+            <InputPassword
+              label="Password*"
+              handlerChange={formik.handleChange}
+              onValue={formik.values.password}
+              name={"password"}
+              id={"password"}
+            />
 
-        <div className="CheckboxWrapper">
-          <input type="checkbox" name="checkbox" id="checkbox" />
-          <label htmlFor="checkbox">Keep me logged in</label>
+            <div className="CheckboxWrapper">
+              <input type="checkbox" name="checkbox" id="checkbox" />
+              <label htmlFor="checkbox">Keep me logged in</label>
+            </div>
+
+            <ButtonComponent className="btn-login" type="submit">
+              Login
+            </ButtonComponent>
+          </form>
+
+          <span>
+            No account ? <Link href="/register">Register here</Link>{" "}
+          </span>
         </div>
 
-        <ButtonComponent className="btn-login" onClick={() => handlerLogin()}>
-          Login
-        </ButtonComponent>
-
-        <span>
-          No account ? <Link href="/register">Register here</Link>{" "}
-        </span>
-      </div>
-    </StyledivLoginPage>
+        {isWarning ? 
+        
+          <div className="error animateOpen">
+            <span>Your user ID and/or password does not match.</span>
+          </div> : ''
+        }
+      </StyledivLoginPage>
+    </>
   );
 }
 
@@ -82,6 +105,34 @@ const StyledivLoginPage = styled.div`
     justify-content: center;
     text-align: center;
     align-items: center;
+    position: relative;
+  }
+  
+  .error {
+    position: absolute;
+    bottom: -88px;
+    padding: 30px;
+    background-color: red;
+    color: white;
+    border-top-left-radius: 30px 30px;
+    border-top-right-radius: 30px 30px;
+
+    &.animateOpen{
+      -webkit-animation:moveOpen 4s;
+      -webkit-animation-fill-mode: forwards;
+    }
+
+    /* Safari and Chrome */
+    @-webkit-keyframes moveOpen 
+      {
+      from {-webkit-transform: translate(0, 0px);}
+      10% {-webkit-transform: translate(0,-80px);}
+      12% {-webkit-transform: translate(0,-82px);}
+      16% {-webkit-transform: translate(0,-84px);}
+      80% {-webkit-transform: translate(0,-86px);}
+      85% {-webkit-transform: translate(0,-88px);}
+      to {-webkit-transform: translate(0, 0px);}
+    }
   }
 
   .CheckboxWrapper {

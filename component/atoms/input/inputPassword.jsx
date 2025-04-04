@@ -26,7 +26,7 @@ const InputPassword = (props) => {
   };
 
   const handlerInput = (e) => {
-    props.handlerChange(e.target.value);
+    props.handlerChange(e);
   };
 
   return (
@@ -53,6 +53,8 @@ const InputPassword = (props) => {
             </IconButton>
           </InputAdornment>
         }
+        id={props.id}
+        name={props.name}
       />
     </StyleFormControl>
   );

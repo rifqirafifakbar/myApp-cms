@@ -1,18 +1,15 @@
-"use client"
+"use client";
 import styled from "@emotion/styled";
-import { Button } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import MenuHamburger from "@/component/atoms/menu/menu";
 
 const Navbar = (props) => {
   return (
-    <StyleNavbar className="navbar">
+    <StyleNavbar
+      className={props.isLoginLogout ? "navbar container" : "navbar"}
+    >
       <div className="logo">Logo</div>
 
-      <div className="hamburger">
-        <button className="hamburgerMenu">
-          <MenuIcon />
-        </button>
-      </div>
+      {!props.isLoginLogout ? <MenuHamburger /> : ""}
     </StyleNavbar>
   );
 };
@@ -23,6 +20,10 @@ const StyleNavbar = styled.div`
   margin-bottom: 20px;
   padding: 30px 0;
   align-items: center;
+
+  &.container {
+    padding: 10px 20px;
+  }
 
   .logo {
     padding: 10px 60px;

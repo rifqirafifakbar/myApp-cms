@@ -2,10 +2,10 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import useDataStore from "@/src/store/dataStore";
+import dayjs from "dayjs";
 
 const ContentAdditionalDetails = (props) => {
   const { data } = useDataStore();
-
   return (
     <StyleContentProfileWrapper>
       <div className="details">
@@ -23,7 +23,7 @@ const ContentAdditionalDetails = (props) => {
         </div>
         <div className="details-profile">
           <span className="title">Date of birth</span>
-          <span className="content">{data?.birth_date ?? ''}</span>
+          <span className="content">{dayjs(data?.birth_date ?? '').format('DD/MM/YYYY')}</span>
         </div>
         <div className="details-profile">
           <span className="title">Marital status</span>

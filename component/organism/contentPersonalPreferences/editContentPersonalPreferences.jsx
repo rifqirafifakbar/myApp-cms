@@ -3,33 +3,88 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import InputComponent from "@/component/atoms/input/input";
 import ButtonComponent from "@/component/atoms/button/ButtonComponent";
-import DropdownComponent from "@/component/atoms/dropdown/dropdownComponent";
+import useDataStore from "@/src/store/dataStore";
+import { useFormik } from "formik";
+import { usePostData } from "@/src/utils/axiosConfig";
 
+const EditContentPersonalPreferences = (props) => {
+  const { setData } = useDataStore();
 
-const EditContentPersonalPreferences= (props) => {
+  const postData = async (values) => {
+    const response = await usePostData(values);
+    if (response) {
+      setData(response);
+      props?.setIsEdit(false);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      hobbies_interest: "",
+      favorite_sport: "",
+      music_genre: "",
+      movie: "",
+    },
+    onSubmit: (values) => {
+      postData(values);
+    },
+  });
+
   return (
     <StyleContentProfileWrapper>
-      <div className="details">
-        <div className="details-profile">
-          <InputComponent className="flex" label="Hobbies and interests" />
-        </div>
-        <div className="details-profile">
-          <InputComponent className="flex" label="Favorite sport" />
-        </div>
-        <div className="details-profile">
-          <InputComponent className="flex" label="Preferred music genre" />
-        </div>
-        <div className="details-profile">
-          <InputComponent className="flex" label="Preferred movie/TV show" />
-        </div>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="details">
+          <div className="details-profile">
+            <InputComponent
+              className="flex"
+              label="Hobbies and interests"
+              handlerChange={formik.handleChange}
+              onValue={formik.values.hobbies_interest}
+              name={"hobbies_interest"}
+              id={"hobbies_interest"}
+            />
+          </div>
+          <div className="details-profile">
+            <InputComponent
+              className="flex"
+              label="Favorite sport"
+              handlerChange={formik.handleChange}
+              onValue={formik.values.favorite_sport}
+              name={"favorite_sport"}
+              id={"favorite_sport"}
+            />
+          </div>
+          <div className="details-profile">
+            <InputComponent
+              className="flex"
+              label="Preferred music genre"
+              handlerChange={formik.handleChange}
+              onValue={formik.values.music_genre}
+              name={"music_genre"}
+              id={"music_genre"}
+            />
+          </div>
+          <div className="details-profile">
+            <InputComponent
+              className="flex"
+              label="Preferred movie/TV show"
+              handlerChange={formik.handleChange}
+              onValue={formik.values.movie}
+              name={"movie"}
+              id={"movie"}
+            />
+          </div>
 
-        <div className="buttonWrapper">
-          <ButtonComponent className="btn-save">SAVE & UPDATE</ButtonComponent>
-          <ButtonComponent className="btn-cancel">CANCEL</ButtonComponent>
-        </div>
+          <div className="buttonWrapper">
+            <ButtonComponent className="btn-save" type="submit">
+              SAVE & UPDATE
+            </ButtonComponent>
+            <ButtonComponent className="btn-cancel" onClick={(e)=> props.setIsEdit(false)}>CANCEL</ButtonComponent>
+          </div>
 
-        <span className="mandatory">* mandatory field</span>
-      </div>
+          <span className="mandatory">* mandatory field</span>
+        </div>
+      </form>
     </StyleContentProfileWrapper>
   );
 };

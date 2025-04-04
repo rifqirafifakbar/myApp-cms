@@ -7,18 +7,16 @@ import { StyleFormControl } from "./configGlobal";
 const InputComponent = (props) => {
 
   const handlerInput = (e) => {
-    props.handlerChange(e.target.value);
+    props?.handlerChange(e);
   };
 
-
-
   return (
-    <StyleFormControl {...props}>
+    <StyleFormControl className={props.className}>
       {props.label ? 
         <FormLabel>{props.label}</FormLabel> : ''
       }
       
-      <Input onChange={handlerInput}/>
+      <Input onChange={handlerInput} value={props?.onValue ?? ''} name={props?.name ?? ''} id={props?.id ?? ''}/>
       {/* <StyleFormHelperText>This is a helper text.</StyleFormHelperText> */}
     </StyleFormControl>
   );
