@@ -20,21 +20,29 @@ export default function Login() {
   const [isWarning, setIsWarning] = React.useState(false);
   const { setData } = useDataStore();
 
+  const showWarning = () => {
+    setIsWarning(true);
+
+    setTimeout(() => {
+      setIsWarning(false);
+    }, 3000);
+  }
+
   const loginData = async (values) =>{
     const response = await useloginData(values);
     if (response){
-      const data = response;
-      setCookie(data["user-token"]);
-      setLocalStorage(data["objectId"]);
-      setData(data);
-      return router.push("/profile");
+      const { data, status } = response;
+      if(status === 200) {
+        setCookie(data["user-token"] ?? '');
+        setLocalStorage(data["objectId"] ?? '');
+        setData(data);
+        return router.push("/profile");
+      }else {
+        showWarning();
+      }
 
     }else {
-      setIsWarning(true);
-
-      setTimeout(() => {
-        setIsWarning(false);
-      }, 3000);
+      showWarning();
     }
   }
 
