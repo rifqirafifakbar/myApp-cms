@@ -9,9 +9,9 @@ export default function Home() {
         <h1> welcome to homepage</h1>
         <ol>
           <li>
-            login account click <Link href={'/login'}>here</Link>
+            login account click <Link href={'/login'} style={{textDecoration: 'underline'}}>here</Link>
           </li>
-          <li>github <a href="https://github.com/rifqirafifakbar/myApp-cms">here</a></li>
+          <li>github <a href="https://github.com/rifqirafifakbar/myApp-cms" style={{textDecoration: 'underline'}} >here</a></li>
         </ol>
 
       </main>

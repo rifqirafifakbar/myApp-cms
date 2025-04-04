@@ -5,9 +5,10 @@ import { getLocalStorage } from "../utils/localstorage";
 import { API_APLICATION_ID, API_KEY, BACKEND_PUBLIC_API_BASE_URL } from "./api";
 
 
-const id = getLocalStorage();
+
 export const useFetchUserData = () => {
   const { setData, data } = useDataStore();
+  const id = getLocalStorage();
   useEffect(() => {
     const fetchData = async () => {
       if (!data && id) {
@@ -29,6 +30,7 @@ export const useFetchUserData = () => {
 };
 
 export const usePostData = async (dataBody) => {
+  const id = getLocalStorage();
   if (id) {
     try {
       const response = await axios.put(
@@ -65,7 +67,7 @@ export const useRegisterData = async (dataBody) => {
       `${BACKEND_PUBLIC_API_BASE_URL}/${API_APLICATION_ID}/${API_KEY}/users/register`, dataBody
     );
     if (response.status === 200) {
-      return response.data;
+      return response;
     }
   } catch (error) {
     console.error("error data:", error);
